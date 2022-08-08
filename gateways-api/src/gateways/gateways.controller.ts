@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { GatewaysService } from './gateways.service';
 import { CreateGatewayDto } from './dto/create-gateway.dto';
 import { UpdateGatewayDto } from './dto/update-gateway.dto';
+import { Document } from 'mongoose';
+import { Schema } from '@nestjs/mongoose';
+import { GatewaySchema } from '../schemas/gateways.schema';
 
 @Controller('gateways')
 export class GatewaysController {
@@ -17,18 +28,21 @@ export class GatewaysController {
     return this.gatewaysService.findAll();
   }
 
-  @Get(':id')
+  @Get(':serialNumber')
   findOne(@Param('serialNumber') serialNumber: string) {
-    return this.gatewaysService.findOne(+serialNumber);
+    return this.gatewaysService.findOne(serialNumber);
   }
 
   @Patch(':serialNumber')
-  update(@Param('serialNumber') serialNumber: string, @Body() updateGatewayDto: UpdateGatewayDto) {
-    return this.gatewaysService.update(+serialNumber, updateGatewayDto);
+  update(
+    @Param('serialNumber') serialNumber: string,
+    @Body() updateGatewayDto: UpdateGatewayDto,
+  ) {
+    return this.gatewaysService.update(serialNumber, updateGatewayDto);
   }
 
   @Delete(':serialNumber')
   remove(@Param('serialNumber') serialNumber: string) {
-    return this.gatewaysService.remove(+serialNumber);
+    return this.gatewaysService.remove(serialNumber);
   }
 }

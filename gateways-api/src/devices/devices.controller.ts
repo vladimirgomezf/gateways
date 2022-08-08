@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DevicesService } from './devices.service';
 import { CreateDeviceDto } from './dto/create-device.dto';
 import { UpdateDeviceDto } from './dto/update-device.dto';
@@ -17,18 +25,18 @@ export class DevicesController {
     return this.devicesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.devicesService.findOne(+id);
+  @Get(':uid')
+  findOne(@Param('uid') uid: number) {
+    return this.devicesService.findOne(+uid);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDeviceDto: UpdateDeviceDto) {
-    return this.devicesService.update(+id, updateDeviceDto);
+  @Patch(':uid')
+  update(@Param('uid') uid: number, @Body() updateDeviceDto: UpdateDeviceDto) {
+    return this.devicesService.update(+uid, updateDeviceDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.devicesService.remove(+id);
+  @Delete(':uid')
+  remove(@Param('uid') uid: number) {
+    return this.devicesService.remove(+uid);
   }
 }

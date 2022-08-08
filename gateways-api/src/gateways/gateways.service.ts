@@ -8,8 +8,9 @@ import { UpdateGatewayDto } from './dto/update-gateway.dto';
 
 @Injectable()
 export class GatewaysService {
-
-  constructor(@InjectModel(Gateway.name) private GatewayModel: Model<GatewayDocument>) {}
+  constructor(
+    @InjectModel(Gateway.name) private GatewayModel: Model<GatewayDocument>,
+  ) {}
 
   async create(createGatewayDto: CreateGatewayDto) {
     return new this.GatewayModel(createGatewayDto).save();
@@ -20,14 +21,17 @@ export class GatewaysService {
   }
 
   async findOne(serialNumber: string) {
-    return this.GatewayModel.findOne({serialNumber});
+    return this.GatewayModel.findOne({ serialNumber });
   }
 
   async update(serialNumber: string, updateGatewayDto: UpdateGatewayDto) {
-    return this.GatewayModel.updateOne({serialNumber}, {$set: {...UpdateGatewayDto}});
+    return this.GatewayModel.updateOne(
+      { serialNumber },
+      { $set: { ...UpdateGatewayDto } },
+    );
   }
 
   async remove(serialNumber: string) {
-    return this.GatewayModel.deleteOne({serialNumber});
+    return this.GatewayModel.deleteOne({ serialNumber });
   }
 }
