@@ -34,6 +34,7 @@ export class GatewaysController {
   }
 
   @Patch(':serialNumber')
+  @UsePipes(new JoiValidationPipe(gatewaySchema))
   update(
     @Param('serialNumber') serialNumber: string,
     @Body() updateGatewayDto: UpdateGatewayDto,
