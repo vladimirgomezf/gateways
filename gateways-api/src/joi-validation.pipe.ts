@@ -1,36 +1,38 @@
+import { ArgumentMetadata, BadRequestException, Injectable, PipeTransform } from "@nestjs/common";
+import { ObjectSchema } from 'joi'
+
+@Injectable()
+export class JoiValidationPipe implements PipeTransform{
+  constructor(private schema: ObjectSchema){}
+
+  transform(value: Record<string, any>) {
+    const {error} = this.schema.validate(value);
+    if (error) {
+      console.error(error);
+      throw new BadRequestException({
+        error: "Validation Faled!",
+        message: error.message.replace(/(\"|\[\d\])/g, "")
+      })
+    }
+    return value;
+  }
+}
+
+
+import { Device } from "./schemas/devices.schema";
+
 const Joi = require('joi');
 
-const schema = Joi.object({
-  username: Joi.string().alphanum().min(3).max(30).required(),
+export const gatewaySchema = Joi.object({
+  serialNumber: Joi.string().alphanum().min(0).max(30).required(),
 
-  password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+  name: Joi.string().min(0).max(50),
 
-  repeat_password: Joi.ref('password'),
-
-  access_token: [Joi.string(), Joi.number()],
-
-  birth_year: Joi.number().integer().min(1900).max(2013),
-
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ['com', 'net'] },
+  ipv4_address: Joi.string().ip({
+    version: [
+      'ipv4'
+    ],
   }),
-})
-  .with('username', 'birth_year')
-  .xor('password', 'access_token')
-  .with('password', 'repeat_password');
 
-schema.validate({ username: 'abc', birth_year: 1994 });
-// -> { value: { username: 'abc', birth_year: 1994 } }
-
-schema.validate({});
-// -> { value: {}, error: '"username" is required' }
-
-// Also -
-
-try {
-  const value = await schema.validateAsync({
-    username: 'abc',
-    birth_year: 1994,
-  });
-} catch (err) {}
+  devices: Joi.array().max(10)
+});
