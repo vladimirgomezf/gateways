@@ -46,4 +46,12 @@ export class GatewaysController {
   remove(@Param('serialNumber') serialNumber: string) {
     return this.gatewaysService.remove(serialNumber);
   }
+
+  @Patch(':serialNumber/:uid')
+  addDevice(
+    @Param('serialNumber') serialNumber: string,
+    @Param('uid') uid: number
+  ) {
+    return this.gatewaysService.asignDevice(serialNumber, uid);
+  }
 }
